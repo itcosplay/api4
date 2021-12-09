@@ -4,6 +4,12 @@ import datetime
 
 from pathlib import Path
 from urllib.parse import urlparse
+from environs import Env
+
+
+env = Env()
+env.read_env()
+nasa_token = env('NASA_TOKEN')
 
 
 def get_and_save_image(url, filename, dir_name):
@@ -31,7 +37,7 @@ def get_images_from_NASA():
     url = 'https://api.nasa.gov/planetary/apod'
     payload = {
         'count': 30,
-        'api_key': os.environ['NASA_TOKEN']
+        'api_key': nasa_token
     }
     response = requests.get(url, params=payload)
     response.raise_for_status()
@@ -47,7 +53,7 @@ def get_images_from_NASA():
 def get_EPIC_from_NASA():
     url = f'https://api.nasa.gov/EPIC/api/natural/images'
     payload = {
-        'api_key': os.environ['NASA_TOKEN']
+        'api_key': nasa_token
     }
     response = requests.get(url, params=payload)
     response.raise_for_status()

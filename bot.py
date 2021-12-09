@@ -23,4 +23,5 @@ def hello(update: Update, context: CallbackContext) -> None:
 if __name__ == '__main__':
     bot = telegram.Bot(token=bot_token)
     bot.send_message(chat_id='@devapil4', text="I'm sorry Dave I'm afraid I can't do that.")
+    bot.send_photo(chat_id='@devapil4', photo=open('./nasa_epic/epic_1b_20211207003634.png', 'rb'))
     main()

@@ -7,21 +7,6 @@ from urllib.parse import urlparse
 from environs import Env
 
 
-env = Env()
-env.read_env()
-nasa_token = env('NASA_TOKEN')
-
-
-def get_and_save_image(url, filename, dir_name):
-    Path(f'./{dir_name}').mkdir(parents=True, exist_ok=True)
-
-    response = requests.get(url)
-    response.raise_for_status()
-
-    with open(f'./{dir_name}/{filename}', 'wb') as file:
-        file.write(response.content)
-
-
 def fetch_spacex_last_launch():
     spacex_url = 'https://api.spacexdata.com/v4/launches'
     response = requests.get(spacex_url)
@@ -30,14 +15,14 @@ def fetch_spacex_last_launch():
 
     for image_num, link in enumerate(links, start=1):
         filename = f'spacex_{image_num}.jpeg'
-        get_and_save_image(link, filename)
+        get_and_save_image(link, filename, 'spacex')
 
   
-def get_images_from_NASA():  
+def get_images_from_NASA(token):  
     url = 'https://api.nasa.gov/planetary/apod'
     payload = {
         'count': 30,
-        'api_key': nasa_token
+        'api_key': token
     }
     response = requests.get(url, params=payload)
     response.raise_for_status()
@@ -46,14 +31,14 @@ def get_images_from_NASA():
     for image_numb, single_image_data in enumerate(images_data, start=1):
         image_url = single_image_data['url']
         image_extension = get_image_extension_from_url(image_url)
-        filename = f'nasa_image_{image_numb}.{image_extension}'
+        filename = f'nasa_image_{image_numb}{image_extension}'
         get_and_save_image(image_url, filename, 'nasa')
 
 
-def get_EPIC_from_NASA():
+def get_EPIC_from_NASA(token):
     url = f'https://api.nasa.gov/EPIC/api/natural/images'
     payload = {
-        'api_key': nasa_token
+        'api_key': token
     }
     response = requests.get(url, params=payload)
     response.raise_for_status()
@@ -72,6 +57,16 @@ def get_EPIC_from_NASA():
         get_and_save_image(url, image_name + '.png', 'nasa_epic')
 
 
+def get_and_save_image(url, filename, dir_name):
+    Path(f'./{dir_name}').mkdir(parents=True, exist_ok=True)
+
+    response = requests.get(url)
+    response.raise_for_status()
+
+    with open(f'./{dir_name}/{filename}', 'wb') as file:
+        file.write(response.content)
+
+
 def get_image_extension_from_url(url):
     url = urlparse(url)
     ext = os.path.splitext(url.path)
@@ -80,4 +75,11 @@ def get_image_extension_from_url(url):
 
 
 if __name__ == '__main__':
-    get_EPIC_from_NASA()
+    env = Env()
+    env.read_env()
+    
+    nasa_token = env('NASA_TOKEN')
+
+    fetch_spacex_last_launch()
+    get_images_from_NASA(nasa_token)
+    get_EPIC_from_NASA(nasa_token)

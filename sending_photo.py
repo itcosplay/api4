@@ -19,7 +19,7 @@ def get_images_paths(*args):
         images = listdir(folder)
 
         for image in images:
-            image = f'./{folder}/{image}'
+            image = f'{folder}/{image}'
             images_paths.append(image)
 
     return images_paths

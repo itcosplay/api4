@@ -19,7 +19,7 @@ def fetch_spacex_launch():
         filename = f'spacex_{image_num}.{extention}'
         save_image_from_url(link, filename, 'spacex')
 
-  
+
 def get_images_from_NASA(token):  
     url = 'https://api.nasa.gov/planetary/apod'
     payload = {
@@ -59,12 +59,12 @@ def get_EPIC_from_NASA(token):
 
 
 def save_image_from_url(url, filename, dir_name, params=None):
-    Path(f'./{dir_name}').mkdir(parents=True, exist_ok=True)
+    Path(f'{dir_name}').mkdir(parents=True, exist_ok=True)
 
     response = requests.get(url, params=params)
     response.raise_for_status()
 
-    with open(f'./{dir_name}/{filename}', 'wb') as file:
+    with open(f'{dir_name}/{filename}', 'wb') as file:
         file.write(response.content)
 
 

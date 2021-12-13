@@ -15,7 +15,8 @@ def fetch_spacex_launch():
     links = response.json()[launch]['links']['flickr']['original']
 
     for image_num, link in enumerate(links, start=1):
-        filename = f'spacex_{image_num}.jpeg'
+        extention = get_image_extension_from_url(link)
+        filename = f'spacex_{image_num}.{extention}'
         get_and_save_image(link, filename, 'spacex')
 
   

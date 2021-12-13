@@ -52,7 +52,6 @@ def get_EPIC_from_NASA(token):
         month = aDateTime.strftime('%m')
         day = aDateTime.strftime('%d')
         image_name = single_image_data['image']
-        token = os.environ['NASA_TOKEN']
 
         url = f'https://api.nasa.gov/EPIC/archive/natural/{year}/{month}/{day}/png/{image_name}.png?api_key={token}'
 

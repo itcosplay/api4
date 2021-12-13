@@ -7,10 +7,9 @@ from os import listdir
 
 def send_photo(image_path, token, chat_id):
     bot = telegram.Bot(token=token)
-    bot.send_photo (
-        chat_id=chat_id,
-        photo=open(image_path, 'rb')
-    )
+
+    with open(image_path, 'rb') as photo:
+        bot.send_photo(chat_id=chat_id, photo=photo)
 
 
 def get_images_paths(*args):

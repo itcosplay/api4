@@ -7,11 +7,12 @@ from urllib.parse import urlparse
 from environs import Env
 
 
-def fetch_spacex_last_launch():
+def fetch_spacex_launch():
+    launch = 90
     spacex_url = 'https://api.spacexdata.com/v4/launches'
     response = requests.get(spacex_url)
-    response.raise_for_status()
-    links = response.json()[90]['links']['flickr']['original']
+    response.raise_for_status() 
+    links = response.json()[launch]['links']['flickr']['original']
 
     for image_num, link in enumerate(links, start=1):
         filename = f'spacex_{image_num}.jpeg'
@@ -80,6 +81,6 @@ if __name__ == '__main__':
     
     nasa_token = env('NASA_TOKEN')
 
-    fetch_spacex_last_launch()
+    fetch_spacex_launch()
     get_images_from_NASA(nasa_token)
     get_EPIC_from_NASA(nasa_token)

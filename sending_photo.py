@@ -13,7 +13,7 @@ def send_photo(image_path, token, chat_id):
     )
 
 
-def create_images_paths(*args):
+def get_images_paths(*args):
     images_paths = []
 
     for folder in args:

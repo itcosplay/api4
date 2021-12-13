@@ -30,10 +30,10 @@ def get_images_from_NASA(token):
     response.raise_for_status()
     images_data = response.json()
 
-    for image_numb, single_image_data in enumerate(images_data, start=1):
+    for num, single_image_data in enumerate(images_data, start=1):
         image_url = single_image_data['url']
         image_extension = get_image_extension_from_url(image_url)
-        filename = f'nasa_image_{image_numb}{image_extension}'
+        filename = f'nasa_image_{num}{image_extension}'
         save_image_from_url(image_url, filename, 'nasa')
 
 

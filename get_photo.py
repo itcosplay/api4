@@ -53,15 +53,15 @@ def get_EPIC_from_NASA(token):
         day = date.strftime('%d')
         image_name = single_image_data['image']
 
-        url = f'https://api.nasa.gov/EPIC/archive/natural/{year}/{month}/{day}/png/{image_name}.png?api_key={token}'
+        url = f'https://api.nasa.gov/EPIC/archive/natural/{year}/{month}/{day}/png/{image_name}.png'
 
-        save_image_from_url(url, image_name + '.png', 'nasa_epic')
+        save_image_from_url(url, f'{image_name}.png', 'nasa_epic', payload)
 
 
-def save_image_from_url(url, filename, dir_name):
+def save_image_from_url(url, filename, dir_name, params=None):
     Path(f'./{dir_name}').mkdir(parents=True, exist_ok=True)
 
-    response = requests.get(url)
+    response = requests.get(url, params=params)
     response.raise_for_status()
 
     with open(f'./{dir_name}/{filename}', 'wb') as file:

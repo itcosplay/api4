@@ -32,7 +32,7 @@ if __name__ == '__main__':
     chat_id = env('CHAT_ID')
     delay = int(env('DELAY'))
     
-    images_paths = create_images_paths (
+    images_paths = get_images_paths (
         'nasa',
         'nasa_epic',
         'spacex'

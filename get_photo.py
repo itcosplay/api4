@@ -17,7 +17,8 @@ def fetch_spacex_launch():
     for image_num, link in enumerate(links, start=1):
         extention = get_image_extension_from_url(link)
         filename = f'spacex_{image_num}.{extention}'
-        save_image_from_url(link, filename, 'spacex')
+        image = get_image_from_url(link)
+        save_image(image, filename, 'spacex')
 
 
 def get_images_from_NASA(token):  
@@ -34,7 +35,10 @@ def get_images_from_NASA(token):
         image_url = single_image_data['url']
         image_extension = get_image_extension_from_url(image_url)
         filename = f'nasa_image_{num}{image_extension}'
-        save_image_from_url(image_url, filename, 'nasa')
+        
+        if image_extension in ['.jpg', '.png', '.gif']:
+            image = get_image_from_url(image_url)
+            save_image(image, filename, 'nasa')
 
 
 def get_EPIC_from_NASA(token):
@@ -55,17 +59,22 @@ def get_EPIC_from_NASA(token):
 
         url = f'https://api.nasa.gov/EPIC/archive/natural/{year}/{month}/{day}/png/{image_name}.png'
 
-        save_image_from_url(url, f'{image_name}.png', 'nasa_epic', payload)
+        image = get_image_from_url(url, payload)
+        save_image(image, f'{image_name}.png', 'nasa_epic')
 
 
-def save_image_from_url(url, filename, dir_name, params=None):
-    Path(f'{dir_name}').mkdir(parents=True, exist_ok=True)
-
+def get_image_from_url(url, params=None):
     response = requests.get(url, params=params)
     response.raise_for_status()
 
+    return response.content
+
+
+def save_image(image, filename, dir_name):
+    Path(f'{dir_name}').mkdir(parents=True, exist_ok=True)
+
     with open(f'{dir_name}/{filename}', 'wb') as file:
-        file.write(response.content)
+        file.write(image)
 
 
 def get_image_extension_from_url(url):
